@@ -28,7 +28,8 @@ const outputsList = [
   'role',
   'layer',
   'arn',
-  'region'
+  'region',
+  'tags'
 ]
 
 const defaults = {
@@ -43,6 +44,7 @@ const defaults = {
   env: {},
   region: 'us-east-1',
   layers: []
+  tags: {}
 }
 
 class AwsLambda extends Component {
