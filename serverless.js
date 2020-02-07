@@ -43,7 +43,8 @@ const defaults = {
   runtime: 'nodejs10.x',
   env: {},
   region: 'us-east-1',
-  tags: {}
+  tags: {},
+  pips: undefined
 }
 
 class AwsLambda extends Component {
@@ -112,7 +113,10 @@ class AwsLambda extends Component {
     } else {
       this.context.status('Packaging')
       this.context.debug(`Packaging lambda code from ${config.code}.`)
-      config.zipPath = await pack(config.code, config.shims)
+      if (config.pips) {
+        this.context.debug(`Adding pip requirements from ${config.pips}`)
+      }
+      config.zipPath = await pack(config.code, config.shims, true, config.pips)
     }
 
     config.hash = await utils.hashFile(config.zipPath)

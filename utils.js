@@ -5,6 +5,10 @@ const globby = require('globby')
 const { contains, isNil, last, split, equals, not, pick } = require('ramda')
 const { readFile, createReadStream, createWriteStream } = require('fs-extra')
 const { utils } = require('@serverless/core')
+const ncp = require('ncp')
+const util = require('util')
+const exec = util.promisify(require('child_process').exec)
+const fs = require('fs')
 
 const VALID_FORMATS = ['zip', 'tar']
 const isValidFormat = (format) => contains(format, VALID_FORMATS)
@@ -231,15 +235,23 @@ const configChanged = (prevLambda, lambda) => {
   return not(equals(inputs, prevInputs))
 }
 
-const pack = async (code, shims = [], packDeps = true) => {
+const pack = async (code, shims = [], packDeps = true, pips = undefined) => {
   if (utils.isArchivePath(code)) {
     return path.resolve(code)
   }
 
   let exclude = []
-
+  let tempPath = code
   if (!packDeps) {
     exclude = ['node_modules/**']
+  } else if (pips) {
+    if (!fs.existsSync(pips)) {
+      throw new Error(`Variable ${pips} defined but not found`)
+    }
+    tempPath = path.join(tmpdir(), `${Math.random().toString(36)}`)
+    await ncp(code, tempPath)
+
+    await exec(`pip3 install --target ${tempPath} -r ${pips}`)
   }
 
   const outputFilePath = path.join(
@@ -249,7 +261,7 @@ const pack = async (code, shims = [], packDeps = true) => {
       .substring(6)}.zip`
   )
 
-  return packDir(code, outputFilePath, shims, exclude)
+  return packDir(tempPath, outputFilePath, shims, exclude)
 }
 
 module.exports = {
