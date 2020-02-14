@@ -27,6 +27,7 @@ const outputsList = [
   'env',
   'role',
   'layer',
+  'layers',
   'arn',
   'region'
 ]
