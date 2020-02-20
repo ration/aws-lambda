@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 const { tmpdir } = require('os')
 const path = require('path')
 const archiver = require('archiver')

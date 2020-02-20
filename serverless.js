@@ -44,7 +44,7 @@ const defaults = {
   runtime: 'nodejs10.x',
   env: {},
   region: 'us-east-1',
-  layers: []
+  layers: [],
   tags: {}
 }
 
