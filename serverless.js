@@ -81,8 +81,7 @@ class AwsLambda extends Component {
       })
       config.role = { arn: outputsAwsIamRole.arn }
     } else {
-      outputsAwsIamRole = await awsIamRole(config.role)
-      config.role = { arn: outputsAwsIamRole.arn }
+       this.context.debug(`Using role ${config.role.arn}`)
     }
 
     if (
