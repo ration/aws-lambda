@@ -19,7 +19,7 @@
     "archiver": "^3.0.0",
     "aws-sdk": "^2.474.0",
     "fs-extra": "^7.0.0",
-    "globby": "^9.2.0",
+    "globby": "^11.0.0",
     "ramda": "^0.26.0"
   },
   "devDependencies": {
