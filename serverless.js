@@ -54,7 +54,7 @@ class AwsLambda extends Component {
 
     const config = mergeDeepRight(defaults, inputs)
 
-    config.name = this.state.name || this.context.resourceId()
+    config.name = inputs.name || this.state.name || this.context.resourceId()
 
     this.context.debug(
       `Starting deployment of lambda ${config.name} to the ${config.region} region.`
@@ -74,6 +74,7 @@ class AwsLambda extends Component {
 
       outputsAwsIamRole = await awsIamRole({
         service: 'lambda.amazonaws.com',
+        name: config.name,
         policy: {
           arn: 'arn:aws:iam::aws:policy/AdministratorAccess'
         },
